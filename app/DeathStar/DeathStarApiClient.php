@@ -36,6 +36,10 @@ class DeathStarApiClient
             throw new \Exception('You need to set an OAuth token.');
         }
 
+        $headers = array_merge([
+            'Content-Type' => 'application/json'
+        ], $headers);
+
         $params = [
             'cert' => [$this->clientCert, $this->clientCertPassword],
             'ssl_key' => [$this->clientSslKey, $this->clientSslKeyPassword],
@@ -44,7 +48,6 @@ class DeathStarApiClient
 
         if ($useToken) {
             $params['headers'] = array_merge([
-                'Content-Type' => 'application/json',
                 'Authorization' => $this->deathStarOAuthToken->getTokenType() . ' ' . $this->deathStarOAuthToken->getAccessToken()
             ], $params['headers']);
         }
