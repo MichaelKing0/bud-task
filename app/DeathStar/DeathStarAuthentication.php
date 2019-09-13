@@ -4,7 +4,7 @@ namespace App\DeathStar;
 
 class DeathStarAuthentication
 {
-    protected $deathStarApiClient;
+    private $deathStarApiClient;
 
     public function __construct(DeathStarApiClient $deathStarApiClient)
     {

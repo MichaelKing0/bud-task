@@ -8,10 +8,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class DeathStarApiClient
 {
-    protected $client, $baseUrl, $clientCert, $clientCertPassword, $clientSslKey, $clientSslKeyPassword;
+    private $client, $baseUrl, $clientCert, $clientCertPassword, $clientSslKey, $clientSslKeyPassword;
 
     /** @var DeathStarOAuthToken */
-    protected $deathStarOAuthToken;
+    private $deathStarOAuthToken;
 
     public function __construct(Client $client, $baseUrl, $clientCert, $clientCertPassword, $clientSslKey, $clientSslKeyPassword)
     {

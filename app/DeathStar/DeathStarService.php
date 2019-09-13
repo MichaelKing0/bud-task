@@ -7,11 +7,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class DeathStarService
 {
-    protected $deathStarApiClient;
-    protected $deathStarAuthentication;
+    private $deathStarApiClient;
+    private $deathStarAuthentication;
 
     /** @var LanguageConverterInterface */
-    protected $languageConverter;
+    private $languageConverter;
 
     public function __construct(DeathStarApiClient $deathStarApiClient, DeathStarAuthentication $deathStarAuthentication)
     {

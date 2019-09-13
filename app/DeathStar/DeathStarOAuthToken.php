@@ -11,7 +11,7 @@ namespace App\DeathStar;
  */
 class DeathStarOAuthToken
 {
-    protected $accessToken, $expiresIn, $tokenType, $scope;
+    private $accessToken, $expiresIn, $tokenType, $scope;
 
     public static function createFromArray(array $tokenArray): self
     {
