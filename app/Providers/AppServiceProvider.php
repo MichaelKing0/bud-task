@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\DeathStar\DeathStarApiClient;
 use App\DeathStar\DeathStarService;
+use App\DeathStar\Loggers\DeathStarApiConsoleLogger;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,7 +24,10 @@ class AppServiceProvider extends ServiceProvider
             $clientSslKey = base_path(env('DEATHSTAR_CLIENT_KEY_PATH'));
             $clientSslKeyPassword = env('DEATHSTAR_CLIENT_KEY_PASSWORD');
 
-            return new DeathStarApiClient(new Client(), $baseUrl, $clientCert, $clientCertPassword, $clientSslKey, $clientSslKeyPassword);
+            $deathStarApiClient = new DeathStarApiClient(new Client(), $baseUrl, $clientCert, $clientCertPassword, $clientSslKey, $clientSslKeyPassword);
+            $deathStarApiClient->setLogger($app->make(DeathStarApiConsoleLogger::class));
+
+            return $deathStarApiClient;
         });
     }
 }

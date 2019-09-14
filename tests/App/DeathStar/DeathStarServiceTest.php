@@ -55,12 +55,12 @@ class DeathStarServiceTest extends \TestCase
             ->with($fakeToken)
             ->andReturn(true);
 
-        $leiaResponseMock = '{"cell": "01000011 01100101 01101100 01101100 00100000 00110010 00110001 00111000 0110111", "block": "01000100 01100101 01110100 01100101 01101110 01110100 01101001 01101111 01101110 00100000 01000010 01101100 01101111 01100011 01101011 00100000 01000001 01000001 00101101 00110010 00110011 00101100"}';
+        $leiaResponseMock = json_decode('{"cell": "01000011 01100101 01101100 01101100 00100000 00110010 00110001 00111000 0110111", "block": "01000100 01100101 01110100 01100101 01101110 01110100 01101001 01101111 01101110 00100000 01000010 01101100 01101111 01100011 01101011 00100000 01000001 01000001 00101101 00110010 00110011 00101100"}', true);
 
         $deathStarApiClientMock->shouldReceive('get')
             ->once()
             ->with('/prison/leia')
-            ->andReturn(new Response(200, [], stream_for($leiaResponseMock)));
+            ->andReturn($leiaResponseMock);
 
         $deathStarAuthenticationMock = \Mockery::mock(DeathStarAuthentication::class)
             ->shouldReceive('getOAuthToken')
@@ -83,7 +83,8 @@ class DeathStarServiceTest extends \TestCase
 
     public function testGetLeiaWithRequestError()
     {
-        $this->expectExceptionObject(new DeathStarApiException('The Death Star responded with a non successful status code: 500. Reason: The Death Star experienced an error.'));
+        $exceptionMessage = 'The Death Star responded with a non successful status code: 500. Reason: The Death Star experienced an error.';
+        $this->expectExceptionObject(new DeathStarApiException($exceptionMessage));
 
         $fakeToken = DeathStarOAuthToken::createFromParams('test', 9999999, 'Bearer', 'Test');
 
@@ -97,7 +98,7 @@ class DeathStarServiceTest extends \TestCase
         $deathStarApiClientMock->shouldReceive('get')
             ->once()
             ->with('/prison/leia')
-            ->andReturn(new Response(500, [], null, '1.1', 'The Death Star experienced an error.'));
+            ->andThrowExceptions([new DeathStarApiException($exceptionMessage)]);
 
         $deathStarAuthenticationMock = \Mockery::mock(DeathStarAuthentication::class)
             ->shouldReceive('getOAuthToken')

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\DeathStar\DeathStarService;
+use App\DeathStar\LanguageConverters\GalacticBasic;
 use Illuminate\Console\Command;
 
 class DeathStarDestroy extends Command
@@ -35,8 +36,11 @@ class DeathStarDestroy extends Command
     {
         $token = $deathStarService->getOAuthToken(env('DEATHSTAR_CLIENT_SECRET'), env('DEATHSTAR_CLIENT_ID'));
         $deathStarService->setOAuthToken($token);
-
+        $deathStarService->setLanguage(new GalacticBasic());
         $deathStarService->deleteExhaust($this->option('torpedoes'));
-        $deathStarService->getLeia();
+
+        $leia = print_r($deathStarService->getLeia(), true);
+
+        $this->info("Leia Cell: $leia");
     }
 }

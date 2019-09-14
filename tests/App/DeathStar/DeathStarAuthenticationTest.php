@@ -26,7 +26,7 @@ class DeathStarAuthenticationTest extends TestCase
                     'Content-Type' => 'application/x-www-form-urlencoded',
                     'Authorization' => 'Basic aWQ6c2VjcmV0'
                 ], false, false)
-            ->andReturn(new Response(200, [], stream_for(json_encode($oAuthToken->getAsArray()))))
+            ->andReturn($oAuthToken->getAsArray())
             ->getMock();
 
         /** @var DeathStarAuthentication $deathStarAuthentication */

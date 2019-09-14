@@ -20,11 +20,6 @@ class DeathStarAuthentication
             'Authorization' => 'Basic ' . base64_encode($clientId . ':' . $clientSecret)
         ], false, false);
 
-        if ($result->getStatusCode() === 200) {
-            $token = json_decode($result->getBody()->getContents(), true);
-            return DeathStarOAuthToken::createFromArray($token);
-        }
-
-        throw new DeathStarApiException(sprintf('Error when trying to retrieve access token. Response: %s. Reason: %s', $result->getStatusCode(), $result->getReasonPhrase()));
+        return DeathStarOAuthToken::createFromArray($result);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\DeathStar;
 
 use App\DeathStar\LanguageConverters\LanguageConverterInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class DeathStarService
 {
@@ -34,37 +33,24 @@ class DeathStarService
         return $this->deathStarAuthentication->getOAuthToken($clientSecret, $clientId);
     }
 
-    protected function parseResponse(ResponseInterface $response)
-    {
-        if ($response->getStatusCode() == 200) {
-            return json_decode($response->getBody()->getContents(), true);
-        }
-
-        throw new DeathStarApiException(sprintf('The Death Star responded with a non successful status code: %s. Reason: %s', $response->getStatusCode(), $response->getReasonPhrase()));
-    }
-
     public function deleteExhaust(int $torpedoes = 2)
     {
-        $response = $this->deathStarApiClient->delete('/reactor/exhaust/1', [
+        return $this->deathStarApiClient->delete('/reactor/exhaust/1', [
             'X-Torpedoes' => $torpedoes,
         ]);
-
-        return $this->parseResponse($response);
     }
 
     public function getLeia()
     {
         $response = $this->deathStarApiClient->get('/prison/leia');
 
-        $obj = $this->parseResponse($response);
-
         if (!$this->languageConverter) {
-            return $obj;
+            return $response;
         }
 
         return [
-            'cell' => $this->languageConverter->convertDroidSpeak($obj['cell']),
-            'block' => $this->languageConverter->convertDroidSpeak($obj['block']),
+            'cell' => $this->languageConverter->convertDroidSpeak($response['cell']),
+            'block' => $this->languageConverter->convertDroidSpeak($response['block']),
         ];
     }
 }
