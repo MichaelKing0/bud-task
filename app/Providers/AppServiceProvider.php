@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\DeathStar\DeathStarApiClient;
+use App\DeathStar\DeathStarService;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(DeathStarApiClient::class, function ($app) {
-            $baseUrl = config('deathstar.base_url');
+            $baseUrl = env('DEATHSTAR_BASE_URL');
             $clientCert = base_path(env('DEATHSTAR_CLIENT_CERT_PATH'));
             $clientCertPassword = env('DEATHSTAR_CLIENT_CERT_PASSWORD');
             $clientSslKey = base_path(env('DEATHSTAR_CLIENT_KEY_PATH'));
