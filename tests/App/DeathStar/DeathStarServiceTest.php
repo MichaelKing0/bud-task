@@ -80,6 +80,42 @@ class DeathStarServiceTest extends \TestCase
         ], $response);
     }
 
+    public function testGetLeiaWithNoLanguage()
+    {
+        $fakeToken = DeathStarOAuthToken::createFromParams('test', 9999999, 'Bearer', 'Test');
+
+        $deathStarApiClientMock = \Mockery::mock(DeathStarApiClient::class);
+
+        $deathStarApiClientMock->shouldReceive('setOAuthToken')
+            ->once()
+            ->with($fakeToken)
+            ->andReturn(true);
+
+        $leiaResponseMock = json_decode('{"cell": "01000011 01100101 01101100 01101100 00100000 00110010 00110001 00111000 0110111", "block": "01000100 01100101 01110100 01100101 01101110 01110100 01101001 01101111 01101110 00100000 01000010 01101100 01101111 01100011 01101011 00100000 01000001 01000001 00101101 00110010 00110011 00101100"}', true);
+
+        $deathStarApiClientMock->shouldReceive('get')
+            ->once()
+            ->with('/prison/leia')
+            ->andReturn($leiaResponseMock);
+
+        $deathStarAuthenticationMock = \Mockery::mock(DeathStarAuthentication::class)
+            ->shouldReceive('getOAuthToken')
+            ->once()
+            ->andReturn($fakeToken)
+            ->getMock();
+
+        $deathStarService = new DeathStarService($deathStarApiClientMock, $deathStarAuthenticationMock);
+
+        $token = $deathStarService->getOAuthToken('Alderaan', 'R2D2');
+        $deathStarService->setOAuthToken($token);
+        $response = $deathStarService->getLeia();
+
+        $this->assertEquals([
+            'cell' => '01000011 01100101 01101100 01101100 00100000 00110010 00110001 00111000 0110111',
+            'block' => '01000100 01100101 01110100 01100101 01101110 01110100 01101001 01101111 01101110 00100000 01000010 01101100 01101111 01100011 01101011 00100000 01000001 01000001 00101101 00110010 00110011 00101100',
+        ], $response);
+    }
+
     public function testGetLeiaWithRequestError()
     {
         $exceptionMessage = 'The Death Star responded with a non successful status code: 500. Reason: The Death Star experienced an error.';

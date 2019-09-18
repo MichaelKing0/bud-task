@@ -30,4 +30,16 @@ class DeathStarApiConsoleLoggerTest extends \TestCase
         $logger = new DeathStarApiConsoleLogger($mock);
         $logger->response(200, ['test-key' => 'test-value'], ['test-key' => 'test-value']);
     }
+
+    public function testResponseWithEmptyArrays()
+    {
+        $mock = \Mockery::mock(ConsoleOutput::class)
+            ->shouldReceive('writeln')
+            ->with("<info>Response</info>\n<options=bold>Code:</> 200\n<options=bold>Headers:</> \n<options=bold>Body:</> \n")
+            ->once()
+            ->getMock();
+
+        $logger = new DeathStarApiConsoleLogger($mock);
+        $logger->response(200, [], []);
+    }
 }
