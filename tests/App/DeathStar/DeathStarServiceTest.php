@@ -9,7 +9,6 @@ use App\DeathStar\DeathStarOAuthToken;
 use App\DeathStar\DeathStarService;
 use App\DeathStar\LanguageConverters\GalacticBasic;
 use GuzzleHttp\Psr7\Response;
-use function GuzzleHttp\Psr7\stream_for;
 
 class DeathStarServiceTest extends \TestCase
 {
