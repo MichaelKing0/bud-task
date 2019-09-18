@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\DeathStar\DeathStarApiClient;
-use App\DeathStar\DeathStarService;
 use App\DeathStar\Loggers\DeathStarApiConsoleLogger;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
